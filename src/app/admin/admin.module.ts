@@ -6,6 +6,10 @@ import { LoginComponent } from './login/login.component';
 import { DashboardPageComponent } from './dashboard-page/dashboard-page.component';
 import { EditPageComponent } from './edit-page/edit-page.component';
 import { CreatePageComponent } from './create-page/create-page.component';
+import { PostComponent } from '../shared/components/post/post.component';
+import { ReactiveFormsModule } from '@angular/forms';
+import { AuthService } from './shared/services/auth.service';
+import { HttpClientModule } from '@angular/common/http';
 
 const routes: Routes = [
   {
@@ -22,14 +26,21 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [CommonModule, RouterModule.forChild(routes)],
-  exports: [RouterModule],
+  imports: [
+    CommonModule,
+    RouterModule.forChild(routes),
+    ReactiveFormsModule,
+    HttpClientModule,
+  ],
+  exports: [RouterModule, PostComponent],
   declarations: [
     AdminLayoutComponent,
     LoginComponent,
     DashboardPageComponent,
     EditPageComponent,
     CreatePageComponent,
+    PostComponent,
   ],
+  providers: [AuthService],
 })
 export class AdminModule {}

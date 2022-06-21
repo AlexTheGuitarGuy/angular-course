@@ -1,1 +1,36 @@
-<p>login works!</p>
+<form class="card" [formGroup]="form" (ngSubmit)="submit()">
+  <h2>Log into admin account</h2>
+
+  <div
+    class="form-control"
+    [ngClass]="{invalid: getEmail()?.invalid && getEmail()?.touched}"
+  >
+    <label for="email">Email:</label>
+    <input id="email" type="email" formControlName="email" placeholder="Please enter your email..."/>
+    <div class="validation" *ngIf="getEmail()?.invalid && getEmail()?.touched">
+      <small *ngIf="getEmail()?.errors?.['required']">Field is required</small>
+      <small *ngIf="getEmail()?.errors?.['email']">Please enter a valid email</small>
+    </div>
+  </div>
+
+  <div class="form-control"
+       [ngClass]="{invalid: getPassword()?.invalid && getPassword()?.touched}"
+  >
+    <label for="password">Password:</label>
+    <input id="password" type="password" formControlName="password" placeholder="Please enter your password..."/>
+    <div class="validation" *ngIf="getPassword()?.invalid && getPassword()?.touched">
+      <small *ngIf="getPassword()?.errors?.['required']">Field is required</small>
+      <small *ngIf="getPassword()?.errors?.['minlength']">
+        Password should be at least {{getPassword()?.errors?.['minlength']?.requiredLength}} long.
+        Your password is {{getPassword()?.errors?.['minlength']?.actualLength}} characters long.
+      </small>
+    </div>
+  </div>
+
+  <button type="submit"
+          class="btn btn-primary"
+          [disabled]="form?.invalid || form?.pending">
+    Log in
+  </button>
+
+</form>
