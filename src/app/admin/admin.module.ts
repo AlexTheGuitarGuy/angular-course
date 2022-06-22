@@ -7,10 +7,11 @@ import { DashboardPageComponent } from './dashboard-page/dashboard-page.componen
 import { EditPageComponent } from './edit-page/edit-page.component';
 import { CreatePageComponent } from './create-page/create-page.component';
 import { PostComponent } from '../shared/components/post/post.component';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { AuthGuard } from './shared/services/auth.guard';
 import { QuillModule } from 'ngx-quill';
+import { SearchPipe } from './shared/pipes/search.pipe';
 
 const routes: Routes = [
   {
@@ -45,6 +46,7 @@ const routes: Routes = [
     ReactiveFormsModule,
     HttpClientModule,
     QuillModule,
+    FormsModule,
   ],
   exports: [RouterModule, PostComponent],
   declarations: [
@@ -54,6 +56,7 @@ const routes: Routes = [
     EditPageComponent,
     CreatePageComponent,
     PostComponent,
+    SearchPipe,
   ],
   providers: [AuthGuard],
 })

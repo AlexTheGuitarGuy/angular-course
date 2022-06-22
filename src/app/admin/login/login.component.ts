@@ -1,18 +1,20 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { User } from 'src/app/shared/interfaces';
 import { AuthService } from '../shared/services/auth.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.sass'],
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent implements OnInit, OnDestroy {
   form!: FormGroup;
   queryParamsMessage: string = '';
   isSubmitting = false;
+  authSub: Subscription = new Subscription();
 
   constructor(
     public auth: AuthService,
@@ -50,7 +52,7 @@ export class LoginComponent implements OnInit {
 
     this.isSubmitting = true;
 
-    this.auth.login(user).subscribe({
+    this.authSub = this.auth.login(user).subscribe({
       next: () => {
         this.form.reset();
         this.router.navigate(['/admin', 'dashboard']);
@@ -58,5 +60,9 @@ export class LoginComponent implements OnInit {
       },
       error: () => (this.isSubmitting = false),
     });
+  }
+
+  ngOnDestroy() {
+    if (this.authSub) this.authSub.unsubscribe();
   }
 }

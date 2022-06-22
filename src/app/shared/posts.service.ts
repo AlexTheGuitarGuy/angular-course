@@ -14,15 +14,33 @@ export class PostsService {
       .pipe(
         map(
           (
-            r:
+            response:
               | FirebaseDatabaseResponse
               | any /*try to remove any without causing errors*/
           ) => ({
             ...post,
-            id: r.name,
+            id: response.name,
             date: new Date(post.date),
           })
         )
       );
+  }
+
+  getPosts(): Observable<Post[]> {
+    return this.http.get(`${environment.firebaseDatabaseURL}/posts.json`).pipe(
+      map((response: { [key: string]: any }) => {
+        return Object.keys(response).map((key) => ({
+          ...response[key],
+          id: key,
+          date: new Date(response[key].date),
+        }));
+      })
+    );
+  }
+
+  removePost(id: string): Observable<void> {
+    return this.http.delete<void>(
+      `${environment.firebaseDatabaseURL}/posts/${id}.json`
+    );
   }
 }
