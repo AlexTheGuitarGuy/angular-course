@@ -1,11 +1,13 @@
 import { Injectable, Injector } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { FirebaseAuthResponse, User } from 'src/app/shared/interfaces';
-import { Observable, tap } from 'rxjs';
+import { catchError, Observable, Subject, tap, throwError } from 'rxjs';
 import { environment } from 'src/environments/environment';
 
 @Injectable()
 export class AuthService {
+  public error$: Subject<string> = new Subject<string>();
+
   constructor(private injector: Injector) {}
 
   get token(): string | null {
@@ -26,11 +28,34 @@ export class AuthService {
         `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${environment.apiKey}`,
         user
       )
-      .pipe(tap((r) => AuthService.setToken(r as FirebaseAuthResponse)));
+      .pipe(
+        tap((r) => AuthService.setToken(r as FirebaseAuthResponse)),
+        catchError((e) => this.handleError(e))
+      );
   }
 
   logout() {
     AuthService.setToken(null);
+  }
+
+  handleError(e: HttpErrorResponse) {
+    const { message } = e.error.error;
+
+    switch (message) {
+      case 'EMAIL_NOT_FOUND':
+        this.error$.next('Email has not been found.');
+        break;
+      case 'INVALID_EMAIL':
+        this.error$.next('Email is invalid.');
+        break;
+      case 'INVALID_PASSWORD':
+        this.error$.next('Password is invalid.');
+        break;
+      default:
+        this.error$.next('An error has occurred.');
+    }
+
+    return throwError(() => e);
   }
 
   isAuth(): boolean {
