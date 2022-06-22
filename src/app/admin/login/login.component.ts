@@ -26,6 +26,8 @@ export class LoginComponent implements OnInit {
     this.route.queryParams.subscribe((params: Params) => {
       if (params['loginAgain'])
         this.queryParamsMessage = 'Please log in again.';
+      if (params['authFailed'])
+        this.queryParamsMessage = 'Authentication has failed.';
     });
 
     this.form = new FormGroup({
@@ -48,13 +50,13 @@ export class LoginComponent implements OnInit {
 
     this.isSubmitting = true;
 
-    this.auth.login(user).subscribe(
-      () => {
+    this.auth.login(user).subscribe({
+      next: () => {
         this.form.reset();
         this.router.navigate(['/admin', 'dashboard']);
         this.isSubmitting = false;
       },
-      () => (this.isSubmitting = false)
-    );
+      error: () => (this.isSubmitting = false),
+    });
   }
 }
