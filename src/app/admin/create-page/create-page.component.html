@@ -1,1 +1,40 @@
-<p>create-page works!</p>
+<form class="form" [formGroup]="form" (ngSubmit)="submit()">
+  <h2>Create a post</h2>
+
+  <div
+    class="form-control"
+    [ngClass]="{invalid: getTitle()?.invalid && getTitle()?.touched}"
+  >
+    <label for="title">Title:</label>
+    <input id="title" type="text" formControlName="title" placeholder="Please insert title..."/>
+    <div class="validation" *ngIf="getTitle()?.invalid && getTitle()?.touched">
+      <small *ngIf="getTitle()?.errors?.['required']">Field is required</small>
+    </div>
+  </div>
+
+  <div class="form-control">
+    <label for="text">Text:</label>
+    <quill-editor id="text" formControlName="text"></quill-editor>
+    <div class="validation" *ngIf="getText()?.invalid && getText()?.touched">
+      <small *ngIf="getText()?.errors?.['required']">Field is required</small>
+    </div>
+  </div>
+
+  <div
+    class="form-control"
+    [ngClass]="{invalid: getAuthor()?.invalid && getAuthor()?.touched}"
+  >
+    <label for="author">Author:</label>
+    <input id="author" type="text" formControlName="author" placeholder="Please insert author..."/>
+
+    <div class="validation" *ngIf="getAuthor()?.invalid && getAuthor()?.touched">
+      <small *ngIf="getAuthor()?.errors?.['required']">Field is required</small>
+    </div>
+  </div>
+
+  <button type="submit"
+          class="btn btn-block btn-dark"
+          [disabled]="form?.invalid || form?.pending || isSubmitting">
+    Submit
+  </button>
+</form>

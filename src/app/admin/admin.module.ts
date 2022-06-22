@@ -11,6 +11,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { AuthService } from './shared/services/auth.service';
 import { HttpClientModule } from '@angular/common/http';
 import { AuthGuard } from './shared/services/auth.guard';
+import { QuillModule } from 'ngx-quill';
 
 const routes: Routes = [
   {
@@ -44,6 +45,7 @@ const routes: Routes = [
     RouterModule.forChild(routes),
     ReactiveFormsModule,
     HttpClientModule,
+    QuillModule,
   ],
   exports: [RouterModule, PostComponent],
   declarations: [

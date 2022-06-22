@@ -12,6 +12,7 @@ import { AuthService } from '../shared/services/auth.service';
 export class LoginComponent implements OnInit {
   form!: FormGroup;
   queryParamsMessage: string = '';
+  isSubmitting = false;
 
   constructor(
     public auth: AuthService,
@@ -41,7 +42,6 @@ export class LoginComponent implements OnInit {
     return this.form.get('password');
   }
 
-  isSubmitting = false;
   submit() {
     if (this.form.invalid) return;
     const user: User = this.form.value;
