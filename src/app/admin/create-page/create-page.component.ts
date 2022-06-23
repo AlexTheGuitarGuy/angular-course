@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Post } from 'src/app/shared/interfaces';
 import { PostsService } from '../../shared/posts.service';
+import { AlertService } from '../shared/services/alert.service';
 
 @Component({
   selector: 'app-create-page',
@@ -12,7 +13,7 @@ export class CreatePageComponent implements OnInit {
   form!: FormGroup;
   isSubmitting = false;
 
-  constructor(private postService: PostsService) {}
+  constructor(private postService: PostsService, private alert: AlertService) {}
 
   ngOnInit() {
     const { required } = Validators;
@@ -52,8 +53,12 @@ export class CreatePageComponent implements OnInit {
       next: () => {
         this.form.reset();
         this.isSubmitting = false;
+        this.alert.success('Post created');
       },
-      error: () => (this.isSubmitting = false),
+      error: () => {
+        this.isSubmitting = false;
+        this.alert.success('Failed to create post');
+      },
     });
   }
 }

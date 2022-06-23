@@ -4,6 +4,7 @@ import { ActivatedRoute, Params, Router } from '@angular/router';
 import { Post } from 'src/app/shared/interfaces';
 import { PostsService } from '../../shared/posts.service';
 import { Subscription, switchMap } from 'rxjs';
+import { AlertService } from '../shared/services/alert.service';
 
 @Component({
   selector: 'app-edit-page',
@@ -19,7 +20,8 @@ export class EditPageComponent implements OnInit, OnDestroy {
   constructor(
     private route: ActivatedRoute,
     private postsService: PostsService,
-    private router: Router
+    private router: Router,
+    private alert: AlertService
   ) {}
 
   ngOnInit() {
@@ -53,10 +55,21 @@ export class EditPageComponent implements OnInit, OnDestroy {
 
     this.isSubmitting = true;
 
-    this.updateSub = this.postsService.updatePost(newPost).subscribe(() => {
-      this.isSubmitting = false;
-      this.router.navigate(['/admin', 'dashboard']);
+    this.updateSub = this.postsService.updatePost(newPost).subscribe({
+      next: () => {
+        this.alert.success('Post updated');
+        this.isSubmitting = false;
+        this.router.navigate(['/admin', 'dashboard']);
+      },
+      error: () => {
+        this.alert.danger('Failed to update post');
+        this.isSubmitting = false;
+      },
     });
+  }
+
+  inputsEdited() {
+    return this.getTitle()?.dirty || this.getText()?.dirty;
   }
 
   ngOnDestroy() {

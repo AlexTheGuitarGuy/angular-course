@@ -1,4 +1,7 @@
-<form class="form" [formGroup]="form" (ngSubmit)="update()">
+<form class="form"
+      [formGroup]="form"
+      (ngSubmit)="update()"
+      *ngIf="form; else loading">
   <h2>Update post</h2>
 
   <div
@@ -33,7 +36,11 @@
 
   <button type="submit"
           class="btn btn-primary"
-          [disabled]="form?.invalid || form?.pending || isSubmitting">
-    Submit
+          [disabled]="form?.invalid || form?.pending || isSubmitting || !inputsEdited()">
+    Update
   </button>
 </form>
+
+<ng-template #loading>
+  Loading...
+</ng-template>

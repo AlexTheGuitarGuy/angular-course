@@ -4,6 +4,7 @@ import { ActivatedRoute, Params, Router } from '@angular/router';
 import { User } from 'src/app/shared/interfaces';
 import { AuthService } from '../shared/services/auth.service';
 import { Subscription } from 'rxjs';
+import { AlertService } from '../shared/services/alert.service';
 
 @Component({
   selector: 'app-login',
@@ -19,10 +20,13 @@ export class LoginComponent implements OnInit, OnDestroy {
   constructor(
     public auth: AuthService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private alert: AlertService
   ) {}
 
   ngOnInit(): void {
+    if (this.auth.isAuth()) this.router.navigate(['/admin', 'dashboard']);
+
     const { required, email, minLength } = Validators;
 
     this.route.queryParams.subscribe((params: Params) => {
@@ -56,9 +60,13 @@ export class LoginComponent implements OnInit, OnDestroy {
       next: () => {
         this.form.reset();
         this.router.navigate(['/admin', 'dashboard']);
+        this.alert.success('Login successful');
         this.isSubmitting = false;
       },
-      error: () => (this.isSubmitting = false),
+      error: () => {
+        this.alert.danger('Login failed');
+        this.isSubmitting = false;
+      },
     });
   }
 

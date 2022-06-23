@@ -10,6 +10,7 @@ import { AdminModule } from './admin/admin.module';
 import { AuthInterceptor } from './shared/auth.interceptor';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthService } from './admin/shared/services/auth.service';
+import { QuillModule } from 'ngx-quill';
 
 const INTERCEPTOR_PROVIDER: Provider = {
   provide: HTTP_INTERCEPTORS,
@@ -24,7 +25,7 @@ const INTERCEPTOR_PROVIDER: Provider = {
     HomePageComponent,
     PostPageComponent,
   ],
-  imports: [BrowserModule, AppRoutingModule, AdminModule],
+  imports: [BrowserModule, AppRoutingModule, AdminModule, QuillModule],
   providers: [AuthService, INTERCEPTOR_PROVIDER],
   bootstrap: [AppComponent],
 })

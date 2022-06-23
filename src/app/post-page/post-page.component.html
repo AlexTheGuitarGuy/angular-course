@@ -1,22 +1,20 @@
-<div class="post">
+<div class="post" *ngIf="post$ | async as post; else loading">
   <div class="header">
-    <h1>Title</h1>
+    <h1>{{post.title}}</h1>
 
     <button routerLink="/" class="btn btn-link">Home</button>
   </div>
 
   <div class="info">
-    <strong>date</strong>
-    <small>author</small>
+    <strong>{{post.author}}</strong>
+    <small>{{post.date | date:'medium'}}</small>
   </div>
 
   <div>
-    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Asperiores assumenda at beatae corporis cum deserunt distinctio dolore error esse excepturi facere facilis fugit laborum, magni obcaecati omnis quaerat ratione similique sunt tempora ut vel veritatis? Eaque enim, labore magnam, minima, nulla officia recusandae reprehenderit suscipit tenetur unde velit vitae voluptate?</p>
-    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Asperiores assumenda at beatae corporis cum deserunt distinctio dolore error esse excepturi facere facilis fugit laborum, magni obcaecati omnis quaerat ratione similique sunt tempora ut vel veritatis? Eaque enim, labore magnam, minima, nulla officia recusandae reprehenderit suscipit tenetur unde velit vitae voluptate?</p>
-    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Asperiores assumenda at beatae corporis cum deserunt distinctio dolore error esse excepturi facere facilis fugit laborum, magni obcaecati omnis quaerat ratione similique sunt tempora ut vel veritatis? Eaque enim, labore magnam, minima, nulla officia recusandae reprehenderit suscipit tenetur unde velit vitae voluptate?</p>
-    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Asperiores assumenda at beatae corporis cum deserunt distinctio dolore error esse excepturi facere facilis fugit laborum, magni obcaecati omnis quaerat ratione similique sunt tempora ut vel veritatis? Eaque enim, labore magnam, minima, nulla officia recusandae reprehenderit suscipit tenetur unde velit vitae voluptate?</p>
-    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Asperiores assumenda at beatae corporis cum deserunt distinctio dolore error esse excepturi facere facilis fugit laborum, magni obcaecati omnis quaerat ratione similique sunt tempora ut vel veritatis? Eaque enim, labore magnam, minima, nulla officia recusandae reprehenderit suscipit tenetur unde velit vitae voluptate?</p>
+    <quill-view-html [content]="this.post.text"></quill-view-html>
   </div>
-
-
 </div>
+
+<ng-template #loading>
+  Loading...
+</ng-template>
