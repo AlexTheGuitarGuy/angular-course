@@ -1,1 +1,39 @@
-<p>edit-page works!</p>
+<form class="form" [formGroup]="form" (ngSubmit)="update()">
+  <h2>Update post</h2>
+
+  <div
+    class="form-control"
+    [ngClass]="{invalid: getTitle()?.invalid && getTitle()?.touched}"
+  >
+    <label for="title">Title:</label>
+    <input id="title" type="text" formControlName="title" placeholder="Please insert title..."/>
+    <div class="validation" *ngIf="getTitle()?.invalid && getTitle()?.touched">
+      <small *ngIf="getTitle()?.errors?.['required']">Field is required</small>
+    </div>
+  </div>
+
+  <div class="form-control">
+    <label for="text">Text:</label>
+    <quill-editor id="text" formControlName="text"></quill-editor>
+    <div class="validation" *ngIf="getText()?.invalid && getText()?.touched">
+      <small *ngIf="getText()?.errors?.['required']">Field is required</small>
+    </div>
+  </div>
+
+  <div
+    class="form-control"
+    style="
+      display: flex;
+      justify-content: space-between;
+    "
+  >
+    <span>Author: {{post.author}}</span>
+    <span>Date: {{post.date | date:'medium'}}</span>
+  </div>
+
+  <button type="submit"
+          class="btn btn-primary"
+          [disabled]="form?.invalid || form?.pending || isSubmitting">
+    Submit
+  </button>
+</form>
